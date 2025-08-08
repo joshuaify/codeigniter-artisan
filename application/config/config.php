@@ -1,6 +1,19 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+$SES_EXPIRE = (isLocalHost ? 2592000 : 7200);
+$HOST_NAME = HTTPS . findHostName();
+$base_url = $HOST_NAME . str_replace(basename($_SERVER["SCRIPT_NAME"]), "", $_SERVER["SCRIPT_NAME"]);
+
+$config['DOMAIN_NAME'] = parse_url($base_url, PHP_URL_HOST);
+
+$config['HOST_NAME'] = $HOST_NAME;
+
+// $config['base_url'] = $base_url;
+defined('DOMAIN_NAME') || define('DOMAIN_NAME', $config['DOMAIN_NAME']);
+defined('HOST_NAME') || define('HOST_NAME', $config['HOST_NAME']);
+defined('SESSION_EXPIRES') || define('SESSION_EXPIRES', $SES_EXPIRE);
+
 /*
 |--------------------------------------------------------------------------
 | Base Site URL
@@ -158,7 +171,7 @@ $config['composer_autoload'] = FALSE;
 | DO NOT CHANGE THIS UNLESS YOU FULLY UNDERSTAND THE REPERCUSSIONS!!
 |
  */
-$config['permitted_uri_chars'] = 'a-z 0-9~%.:_\-';
+$config['permitted_uri_chars'] = 'a-z 0-9~%.:_\-=';
 
 /*
 |--------------------------------------------------------------------------
@@ -223,7 +236,7 @@ $config['allow_get_array'] = TRUE;
 | your log files will fill up very fast.
 |
  */
-$config['log_threshold'] = 0;
+$config['log_threshold'] = 1;
 
 /*
 |--------------------------------------------------------------------------
@@ -234,7 +247,8 @@ $config['log_threshold'] = 0;
 | application/logs/ directory. Use a full server path with trailing slash.
 |
  */
-$config['log_path'] = '';
+$config['log_dir'] = 'writable/';
+$config['log_path'] = $config['log_dir'] . 'error/';
 
 /*
 |--------------------------------------------------------------------------
@@ -324,7 +338,7 @@ $config['cache_query_string'] = FALSE;
 | https://codeigniter.com/user_guide/libraries/encryption.html
 |
  */
-$config['encryption_key'] = '';
+$config['encryption_key'] = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
 /*
 |--------------------------------------------------------------------------
@@ -377,13 +391,27 @@ $config['encryption_key'] = '';
 | except for 'cookie_prefix' and 'cookie_httponly', which are ignored here.
 |
  */
+// -- FILES SESSION ---------/
 $config['sess_driver'] = 'files';
-$config['sess_cookie_name'] = 'ci_session';
-$config['sess_expiration'] = 7200;
-$config['sess_save_path'] = NULL;
+$config['sess_save_path'] = sys_get_temp_dir();
+$config['sess_use_database'] = FALSE;
+$config['sess_time_to_update'] = $SES_EXPIRE;
+
+// -- DATABASE SESSION ---------/
+// $config['sess_driver'] = 'database';
+// $config['sess_save_path'] = 'tbl_sessions';
+// $config['sess_use_database'] = true;
+// $config['sess_table_name'] = 'tbl_sessions';
+// $config['sess_time_to_update'] = $SES_EXPIRE;
+
+// -- OTHER SESSION CONFIG---------/
+$config['sess_cookie_name'] = COOKIE_PREFIX . 'artisan';
+$config['sess_expire_on_close'] = FALSE;
+$config['sess_expiration'] = $SES_EXPIRE;
 $config['sess_match_ip'] = FALSE;
-$config['sess_time_to_update'] = 300;
-$config['sess_regenerate_destroy'] = FALSE;
+$config['sess_regenerate_destroy'] = false;
+$config['same_site'] = null;
+$config['sess_match_useragent'] = FALSE;
 
 /*
 |--------------------------------------------------------------------------
@@ -400,11 +428,12 @@ $config['sess_regenerate_destroy'] = FALSE;
 |       'cookie_httponly') will also affect sessions.
 |
  */
-$config['cookie_prefix'] = '';
-$config['cookie_domain'] = '';
-$config['cookie_path'] = '/';
-$config['cookie_secure'] = FALSE;
-$config['cookie_httponly'] = FALSE;
+$config['cookie_prefix']    = COOKIE_PREFIX;
+$config['cookie_domain']    = DOMAIN_NAME;
+$config['cookie_path']        = '/';
+$config['cookie_secure']    = (HTTPS == "https");
+$config['cookie_httponly']     = FALSE;
+$config['cookie_samesite']     = 'Strict';
 
 /*
 |--------------------------------------------------------------------------
@@ -451,9 +480,11 @@ $config['global_xss_filtering'] = FALSE;
 $config['csrf_protection'] = FALSE;
 $config['csrf_token_name'] = 'csrf_test_name';
 $config['csrf_cookie_name'] = 'csrf_cookie_name';
-$config['csrf_expire'] = 7200;
-$config['csrf_regenerate'] = TRUE;
-$config['csrf_exclude_uris'] = array();
+$config['csrf_expire'] = $SES_EXPIRE;
+$config['csrf_regenerate'] = true;
+$config['csrf_exclude_uris'] = [
+    'api/*', // Example: Exclude all API routes from CSRF protection
+];
 
 /*
 |--------------------------------------------------------------------------
@@ -521,3 +552,14 @@ $config['rewrite_short_tags'] = FALSE;
 | Array:		array('10.0.1.200', '192.168.5.0/24')
  */
 $config['proxy_ips'] = '';
+/*
+|--------------------------------------------------------------------------
+| Application Demo Urls
+|--------------------------------------------------------------------------
+|
+| If you add url to the demo_domains array, certain actions of this application will be restricted on the said domains.
+|
+| Array:		array('example.com', 'mydomain.org') no https:/ or http://
+Must be array of elements or empty array to disable the demo feature.
+*/
+$config['DEMO_DOMAINS'] = [];

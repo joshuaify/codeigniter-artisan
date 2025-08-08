@@ -14,7 +14,7 @@ class Admin extends CI_model{
 	public function loginAttempt($email, $password) {
 		$user = $this->db->get_where($this->table, ['email' => $email])->row();
 
-		if (count($user) > 0 && password_verify($password, $user->password) === true) {
+		if ($user > 0 && password_verify($password, $user->password) === true) {
 			return $user;
 		}
 		return false;
