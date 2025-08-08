@@ -6,7 +6,7 @@
  *
  * This content is released under the MIT License (MIT)
  *
- * Copyright (c) 2014 - 2017, British Columbia Institute of Technology
+ * Copyright (c) 2019 - 2022, CodeIgniter Foundation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,8 +29,9 @@
  * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
- * @copyright	Copyright (c) 2014 - 2017, British Columbia Institute of Technology (http://bcit.ca/)
- * @license	http://opensource.org/licenses/MIT	MIT License
+ * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
+ * @copyright	Copyright (c) 2019 - 2022, CodeIgniter Foundation (https://codeigniter.com/)
+ * @license	https://opensource.org/licenses/MIT	MIT License
  * @link	https://codeigniter.com
  * @since	Version 1.0.0
  * @filesource
@@ -44,8 +45,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @subpackage	Libraries
  * @category	Shopping Cart
  * @author		EllisLab Dev Team
- * @link		https://codeigniter.com/user_guide/libraries/cart.html
- * @deprecated	3.0.0	This class is too specific for CI.
+ * @link		https://codeigniter.com/userguide3/libraries/cart.html
+//  * @deprecated	3.0.0	This class is too specific for CI.
  */
 class CI_Cart {
 
@@ -108,12 +109,14 @@ class CI_Cart {
 		$this->CI->load->driver('session', $config);
 
 		// Grab the shopping cart array from the session table
-		$this->_cart_contents = $this->CI->session->userdata('cart_contents');
+		$this->_cart_contents = $this->CI->session->userdata(CART_SESSIONKEY);
 		if ($this->_cart_contents === NULL)
 		{
 			// No cart exists so we'll set some base values
 			$this->_cart_contents = array('cart_total' => 0, 'total_items' => 0);
 		}
+
+		// dd($this->_cart_contents);
 
 		log_message('info', 'Cart Class Initialized');
 	}
@@ -406,7 +409,7 @@ class CI_Cart {
 		// Is our cart empty? If so we delete it from the session
 		if (count($this->_cart_contents) <= 2)
 		{
-			$this->CI->session->unset_userdata('cart_contents');
+			$this->CI->session->unset_userdata(CART_SESSIONKEY);
 
 			// Nothing more to do... coffee time!
 			return FALSE;
@@ -414,7 +417,7 @@ class CI_Cart {
 
 		// If we made it this far it means that our cart has data.
 		// Let's pass it to the Session class so it can be stored
-		$this->CI->session->set_userdata(array('cart_contents' => $this->_cart_contents));
+		$this->CI->session->set_userdata(array(CART_SESSIONKEY => $this->_cart_contents));
 
 		// Woot!
 		return TRUE;
@@ -561,7 +564,7 @@ class CI_Cart {
 	public function destroy()
 	{
 		$this->_cart_contents = array('cart_total' => 0, 'total_items' => 0);
-		$this->CI->session->unset_userdata('cart_contents');
+		$this->CI->session->unset_userdata(CART_SESSIONKEY);
 	}
 
 }

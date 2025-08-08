@@ -1,4 +1,5 @@
 <?php
+include('server.php');
 /**
  * CodeIgniter
  *
@@ -53,7 +54,7 @@
  *
  * NOTE: If you change these, also change the error_reporting() code below
  */
-define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
+// define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
 
 /*
  *---------------------------------------------------------------
@@ -246,6 +247,13 @@ if (is_dir($application_folder)) {
 }
 
 define('APPPATH', $application_folder . DIRECTORY_SEPARATOR);
+defined('LANGPATH') || define('LANGPATH', APPPATH . 'language' . DIRECTORY_SEPARATOR);
+defined('LIBPATH') || define('LIBPATH', APPPATH . 'libraries' . DIRECTORY_SEPARATOR);
+defined('MODELPATH') || define('MODELPATH', APPPATH . 'models' . DIRECTORY_SEPARATOR);
+defined('TRAITS_PATH') || define('TRAITS_PATH', APPPATH . "traits" . DIRECTORY_SEPARATOR);
+defined('DB_PATH') || define('DB_PATH', APPPATH . "database" . DIRECTORY_SEPARATOR);
+defined('DB_FILE_NAME') || define('DB_FILE_NAME', "config.php");
+defined('DB_FILE_PATH') || define('DB_FILE_PATH', DB_PATH . "config.php");
 
 // The path to the "views" directory
 if (!isset($view_folder[0]) && is_dir(APPPATH . 'views' . DIRECTORY_SEPARATOR)) {
