@@ -148,8 +148,8 @@ defined('TIMEZONE') || define('TIMEZONE', "Africa/Lagos");
 date_default_timezone_set(TIMEZONE);
 defined('isLocalHost') || define('isLocalHost', isLocalHost());
 
-defined('USER_PATH') || define('USER_PATH', 'backoffice/');
-defined('ADMIN_PATH') || define('ADMIN_PATH', 'blend/');
+defined('USER_PATH') || define('USER_PATH', 'user/');
+defined('ADMIN_PATH') || define('ADMIN_PATH', 'admin/');
 defined('AUTH_PATH') || define('AUTH_PATH', 'auth/');
 defined('AUTHADMIN_PATH') || define('AUTHADMIN_PATH', 'authadmin/');
 defined('HOME_PATH') || define('HOME_PATH', '');
@@ -164,14 +164,3 @@ defined('COOKIE_PREFIX') || define('COOKIE_PREFIX', getTopLevelDomain(findHostNa
 
 defined('LOCATION_PROTOCOL') || define('LOCATION_PROTOCOL', (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1) || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' ? "https" : "http"));
 defined('HTTPS') || define('HTTPS', LOCATION_PROTOCOL . '://');
-
-defined('API_CONTROLLER_PATH') || define('API_CONTROLLER_PATH', 'core/MY_ApiController.php');
-defined('REST_PATH') || define('REST_PATH', 'rest/');
-defined('API_PATH') || define('API_PATH', 'rest/api/');
-defined('API_ENDPOINT') || define('API_ENDPOINT', 'endpoint/v1/');
-defined('API_PATH_QUIZ') || define('API_PATH_QUIZ', 'rest/quiz_api/');
-defined('API_ENDPOINT_QUIZ') || define('API_ENDPOINT_QUIZ', 'endpoint/v1/quiz/');
-defined('loginQuery') || define('loginQuery', [
-    'admin' => "a.ad_password as loginPassword,a.admin_id as loginID,a.ad_username as loginUsername,a.ad_email as loginEmail,a.ad_mobile as loginMobile,a.ad_track as loginTrackID,a.my_config as loginConfig,a.ad_fname as loginFname,a.ad_lname as loginLname,a.ad_oname as loginOname,a.role_id as loginRoleID,a.ad_active as loginActive, 'admin' as loginType, 'ad_' as loginPrefix, '1' as loginArea, 'admins' as loginTable, '1' as isLogin, 'admin_id' as loginField",
-    'user' => "u.usr_password as loginPassword,u.user_id as loginID,u.usr_username as loginUsername,u.usr_email as loginEmail,u.usr_mobile as loginMobile,u.usr_track as loginTrackID,u.my_config as loginConfig,u.usr_fname as loginFname,u.usr_lname as loginLname,u.usr_oname as loginOname,u.role_id as loginRoleID,u.usr_active as loginActive,u.package_id as loginPackage, 'user' as loginType, 'usr_' as loginPrefix, '2' as loginArea, 'users' as loginTable, '2' as isLogin, 'user_id' as loginField"
-]);
